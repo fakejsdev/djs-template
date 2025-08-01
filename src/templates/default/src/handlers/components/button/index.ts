@@ -8,7 +8,7 @@ const buttons: ButtonsMap = new Map();
 export const setupButtonFiles = async () => {
   const buttonFiles = globSync("src/modules/**/buttons/**/*.{js,ts}", {
     cwd: process.cwd(),
-    ignore: ["**/*.{test,spec}.{js,ts}"],
+    ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
   });
 
   if (!buttonFiles.length) return buttons;

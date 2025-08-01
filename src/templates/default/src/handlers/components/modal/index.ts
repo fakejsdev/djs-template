@@ -8,7 +8,7 @@ const modals: ModalsMap = new Map();
 export const setupModalFiles = async () => {
   const modalFiles = globSync("src/modules/**/modals/**/*.{js,ts}", {
     cwd: process.cwd(),
-    ignore: ["**/*.{test,spec}.{js,ts}"],
+    ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
   });
 
   if (!modalFiles.length) return modals;

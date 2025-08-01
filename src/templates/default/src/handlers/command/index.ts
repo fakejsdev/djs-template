@@ -9,7 +9,7 @@ const setupCommandFiles = async () => {
 
   const commandFiles = globSync("src/modules/**/commands/**/*.{js,ts}", {
     cwd: process.cwd(),
-    ignore: ["**/*.{test,spec}.{js,ts}"],
+    ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
   });
   if (!commandFiles.length) return commands;
 
