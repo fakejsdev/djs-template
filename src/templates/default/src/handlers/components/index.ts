@@ -55,7 +55,7 @@ const createInteractionChecker = (type: string) => {
   const checkers: Record<string, (interaction: any) => boolean> = {
     button: (i) => i.isButton(),
     modal: (i) => i.isModalSubmit(),
-    selectmenu: (i) => i.isStringSelectMenu(),
+    dropdown: (i) => i.isStringSelectMenu(),
     autocomplete: (i) => i.isAutocomplete(),
   };
 
