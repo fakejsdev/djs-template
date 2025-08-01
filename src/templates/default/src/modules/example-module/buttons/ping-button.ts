@@ -1,3 +1,7 @@
+import { ActionRowBuilder, ModalBuilder, TextInputStyle } from "discord.js";
+
+import { TextInputBuilder } from "@discordjs/builders";
+
 export const config: ButtonConfig = {
   customId: "ping-button",
   name: "Ping Button",
@@ -5,8 +9,18 @@ export const config: ButtonConfig = {
 };
 
 export const run: ButtonRun = async (interaction) => {
-  return await interaction.reply({
-    content: "Pong!",
-    flags: ["Ephemeral"],
-  });
+  const exampleModal = new ModalBuilder()
+    .setCustomId("example-modal")
+    .setTitle("Example Modal")
+    .addComponents(
+      new ActionRowBuilder<TextInputBuilder>().addComponents(
+        new TextInputBuilder()
+          .setCustomId("exampleInput")
+          .setLabel("Enter something")
+          .setStyle(TextInputStyle.Short)
+          .setRequired(true)
+      )
+    );
+
+  return await interaction.showModal(exampleModal);
 };
