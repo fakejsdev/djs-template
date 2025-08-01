@@ -1,27 +1,12 @@
-import {
-  handleCommands,
-  registerSlashCommand,
-  setupCommandFiles,
-} from "./command";
-
 import { Console } from "@/lib/utils";
+import { initCommandHandler } from "./command";
 
 export class HandlersManager {
   private setupTasks: (() => Promise<void>)[] = [];
-  private readonly commandsDir = "src/modules/**/commands/**/*.{js,ts}";
-  private readonly eventsDir = "src/modules/**/events/**/*.{js,ts}";
-  private readonly componentsDir = "src/modules/**/components/**/*.{js,ts}";
 
   public setupCommandHandler() {
     this.setupTasks.push(async () => {
-      const commands = await setupCommandFiles(this.commandsDir);
-      if (!commands.size) {
-        Console.Warn("No commands found, skipping command registration.");
-        return;
-      }
-
-      handleCommands(commands);
-      await registerSlashCommand(commands);
+      await initCommandHandler();
     });
     return this;
   }

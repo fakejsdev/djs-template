@@ -4,11 +4,13 @@ import { globSync } from "glob";
 
 type CommandsMap = Map<string, CommandConfigWithRun>;
 
-// src/modules/**/commands */
-export const setupCommandFiles = async (dir: string) => {
+const setupCommandFiles = async () => {
   const commands: CommandsMap = new Map();
 
-  const commandFiles = globSync(dir);
+  const commandFiles = globSync("src/modules/**/commands/**/*.{js,ts}", {
+    cwd: process.cwd(),
+    ignore: ["**/*.{test,spec}.{js,ts}"],
+  });
   if (!commandFiles.length) return commands;
 
   for (const file of commandFiles) {
@@ -27,7 +29,7 @@ export const setupCommandFiles = async (dir: string) => {
   return commands;
 };
 
-export const registerSlashCommand = async (commands: CommandsMap) => {
+const registerSlashCommand = async (commands: CommandsMap) => {
   const guildId = process.env.GUILD_ID;
   if (!guildId) throw new Error("GUILD_ID is not set in environment variables");
 
@@ -48,7 +50,7 @@ export const registerSlashCommand = async (commands: CommandsMap) => {
   Console.Log(`(+) Registered ${commands.size} commands in ${guild.name}`);
 };
 
-export const handleCommands = (commands: CommandsMap) => {
+const startCommandHandling = async (commands: CommandsMap) => {
   client.on("interactionCreate", async (i) => {
     if (!i.isChatInputCommand() || !i.inCachedGuild()) return;
 
@@ -64,4 +66,14 @@ export const handleCommands = (commands: CommandsMap) => {
         Console.Log(`(✓) Command ${i.commandName} executed`);
       });
   });
+
+  await registerSlashCommand(commands);
+};
+
+export const initCommandHandler = async () => {
+  const commands = await setupCommandFiles();
+  if (!commands.size)
+    return Console.Warn("No commands found, skipping command registration.");
+
+  await startCommandHandling(commands);
 };
