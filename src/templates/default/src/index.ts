@@ -3,6 +3,7 @@ import { HandlersManager } from "./handlers";
 import { client } from "@lib/client";
 
 const manager = new HandlersManager()
+  .setupEventHandler()
   .setupCommandHandler()
   .setupComponentHandler();
 
