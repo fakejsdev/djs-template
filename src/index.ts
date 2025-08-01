@@ -1,10 +1,13 @@
+#!/usr/bin/env node
+
+import { runCli } from "./cli/index.js";
+
 async function main() {
   try {
-    console.log("Starting CLI...");
+    await runCli();
+    process.exit(0);
   } catch (error: any) {
-    console.error(
-      `\x1b[1m❌ ${error.message || "An unexpected error occurred."}\x1b[0m`
-    );
+    console.error(`❌ ${error.message || "An unexpected error occurred."}`);
     process.exit(1);
   }
 }
