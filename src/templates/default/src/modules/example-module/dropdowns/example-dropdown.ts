@@ -7,7 +7,7 @@ export const config: DropdownConfig = {
 export const run: DropdownRun = async (interaction) => {
   const selectedValues = interaction.values;
 
-  await interaction.reply({
+  return await interaction.reply({
     content: `You selected: ${selectedValues.join(", ")}`,
     flags: ["Ephemeral"],
   });
