@@ -1,42 +1,21 @@
 {
-  "name": "@fakejs/create-djs-template",
-  "version": "1.0.0",
-  "description": "Discord.js project template generator",
+  "name": "default",
+  "module": "src/index.ts",
   "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "create-djs-template": "dist/index.js"
-  },
-  "files": [
-    "dist",
-    "templates"
-  ],
   "scripts": {
     "dev": "bun run --watch .",
-    "build": "bun build src/index.ts --outdir dist --target node --format esm",
-    "prepublishOnly": "npm run build"
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "start": "bun run build && bun run dist/index.js"
   },
-  "keywords": [
-    "discord",
-    "discordjs",
-    "template",
-    "create",
-    "generator",
-    "bot"
-  ],
-  "author": "fakejsdev <fakejsdev@proton.me>",
-  "license": "MIT",
-  "dependencies": {
-    "glob": "^11.0.3",
-    "prompts": "^2.4.2"
-  },
+  "private": true,
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/prompts": "^2.4.9",
-    "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
+    "@types/bun": "latest"
   },
-  "engines": {
-    "node": ">=16.0.0"
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0",
+    "glob": "^11.0.3"
   }
 }
