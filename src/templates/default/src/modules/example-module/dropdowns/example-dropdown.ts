@@ -9,6 +9,6 @@ export const run: DropdownRun = async (interaction) => {
 
   await interaction.reply({
     content: `You selected: ${selectedValues.join(", ")}`,
-    ephemeral: true,
+    flags: ["Ephemeral"],
   });
 };
