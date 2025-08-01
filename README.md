@@ -146,18 +146,18 @@ export default {
 
 ```typescript
 // src/modules/my-feature/components/buttons/hello-button.ts
-import type { Button } from "@/handlers/components/button/types";
+export const config: ButtonConfig = {
+  customId: "hello_button",
+  name: "Hello Button",
+  description: "A button that says hello!",
+};
 
-export default {
-  id: "hello_button",
-
-  async execute(interaction) {
-    await interaction.reply({
-      content: "Button clicked! 🎉",
-      ephemeral: true,
-    });
-  },
-} satisfies Button;
+export const run: ButtonRun = async (interaction) => {
+  await interaction.reply({
+    content: "Button clicked! 🎉",
+    ephemeral: true,
+  });
+};
 ```
 
 ### **Step 4: Add Events**
@@ -240,36 +240,45 @@ src/modules/example-module/
 
 ```typescript
 // Interactive buttons in messages
-export default {
-  id: "my_button",
-  async execute(interaction) {
-    // Handle button click
-  },
-} satisfies Button;
+export const config: ButtonConfig = {
+  customId: "my_button",
+  name: "My Button",
+  description: "Example button description",
+};
+
+export const run: ButtonRun = async (interaction) => {
+  // Handle button click
+};
 ```
 
 ### **Dropdowns**
 
 ```typescript
 // Select menus
-export default {
-  id: "my_dropdown",
-  async execute(interaction) {
-    // Handle selection
-  },
-} satisfies Dropdown;
+export const config: DropdownConfig = {
+  customId: "my_dropdown",
+  name: "My Dropdown",
+  description: "Example dropdown description",
+};
+
+export const run: DropdownRun = async (interaction) => {
+  // Handle selection
+};
 ```
 
 ### **Modals**
 
 ```typescript
 // Form modals
-export default {
-  id: "my_modal",
-  async execute(interaction) {
-    // Handle form submission
-  },
-} satisfies Modal;
+export const config: ModalConfig = {
+  customId: "my_modal",
+  name: "My Modal",
+  description: "Example modal description",
+};
+
+export const run: ModalRun = async (interaction) => {
+  // Handle form submission
+};
 ```
 
 ## 🤝 Contributing
@@ -283,7 +292,7 @@ export default {
 
 ## 📝 License
 
-MIT © [FakeJS](https://github.com/fakejsdev)
+MIT © [fakejsdev](https://github.com/fakejsdev)
 
 ## 🔗 Links
 
