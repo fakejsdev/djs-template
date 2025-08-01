@@ -3,7 +3,7 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch .",
+    "dev": "bun --watch run  .",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "start": "bun run build && bun run dist/index.js"
   },
