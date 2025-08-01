@@ -56,7 +56,6 @@ const createInteractionChecker = (type: string) => {
     button: (i) => i.isButton(),
     modal: (i) => i.isModalSubmit(),
     dropdown: (i) => i.isStringSelectMenu(),
-    autocomplete: (i) => i.isAutocomplete(),
   };
 
   return checkers[type] || (() => false);
