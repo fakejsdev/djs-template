@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  ApplicationCommandOptionType,
   ButtonBuilder,
   ButtonStyle,
   ContainerBuilder,
@@ -14,8 +13,6 @@ export const config: CommandConfig = new SlashCommandBuilder()
   .setDescription("Replies with Pong!");
 
 export const run: CommandRun = async (interaction) => {
-  const customMessage = interaction.options.getString("message");
-
   const containerBuilder = new ContainerBuilder()
     .addTextDisplayComponents(
       new TextDisplayBuilder().setContent("## Ping Pong!")
