@@ -1,8 +1,14 @@
 import { Console } from "@/lib/utils";
+import { HandlersManager } from "./handlers";
 import { client } from "@lib/client";
 
-client.on("ready", () => {
-  Console.Log(`🤖 Logged in as ${client.user?.tag}`);
+const manager = new HandlersManager().setupCommandHandler({
+  dir: "src/modules/**/commands/**/*.{js,ts}", // Glob pattern for command files
+});
+
+client.on("ready", async () => {
+  await manager.build();
+  Console.Log(`Logged in as ${client.user?.tag}`);
 });
 
 client.login(process.env.BOT_TOKEN);
