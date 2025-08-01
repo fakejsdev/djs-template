@@ -22,7 +22,7 @@ export const run: CommandRun = async (interaction) => {
     .addActionRowComponents(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setCustomId("ping_button")
+          .setCustomId("ping-button")
           .setLabel("Click me!")
           .setStyle(ButtonStyle.Primary)
       )

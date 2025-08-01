@@ -1,9 +1,10 @@
 import { Console } from "@/lib/utils";
 import { initCommandHandler } from "./command";
+import { initComponentsHandler } from "./components";
 
 export class HandlersManager {
   private setupTasks: (() => Promise<void>)[] = [];
-  private queuedHandlers: Set<string> = new Set();
+  private queuedHandlers = new Set<string>();
 
   public setupCommandHandler() {
     if (this.queuedHandlers.has("commands")) {
@@ -12,6 +13,7 @@ export class HandlersManager {
     }
 
     this.queuedHandlers.add("commands");
+
     this.setupTasks.push(async () => {
       await initCommandHandler();
     });
@@ -25,6 +27,7 @@ export class HandlersManager {
     }
 
     this.queuedHandlers.add("events");
+
     this.setupTasks.push(async () => {
       Console.Log("Event handler setup is not implemented yet.");
     });
@@ -38,8 +41,9 @@ export class HandlersManager {
     }
 
     this.queuedHandlers.add("components");
+
     this.setupTasks.push(async () => {
-      Console.Log("Component handler setup is not implemented yet.");
+      await initComponentsHandler();
     });
     return this;
   }
@@ -50,6 +54,5 @@ export class HandlersManager {
     }
     Console.Log("All handlers have been set up successfully.");
     this.setupTasks = [];
-    this.queuedHandlers.clear();
   }
 }
