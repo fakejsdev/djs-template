@@ -36,8 +36,6 @@ const discoverComponentHandlers = async () => {
           isType,
           name: componentType,
         });
-
-        Console.Log(`(+) Initialized ${componentType} handler`);
       } else {
         Console.Warn(
           `Skipping ${componentType} - missing setup or handle function`
@@ -64,11 +62,19 @@ const createInteractionChecker = (type: string) => {
 const setupComponentHandlers = async () => {
   await discoverComponentHandlers();
 
+  let totalComponents = 0;
+
   for (const handler of componentHandlers) {
     const components = await handler.setup();
-    if (!components.size) {
-      Console.Warn(`(!) No ${handler.name}s were found`);
-    }
+    totalComponents += components.size;
+  }
+
+  if (totalComponents > 0) {
+    Console.Log(
+      `🧩 Loaded ${totalComponents} component${
+        totalComponents === 1 ? "" : "s"
+      }`
+    );
   }
 };
 

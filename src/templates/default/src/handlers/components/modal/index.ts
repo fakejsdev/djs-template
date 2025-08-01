@@ -22,11 +22,9 @@ export const setupModalFiles = async () => {
     if (modals.has(config.customId))
       throw new Error(`Duplicate modal customId ${config.customId}`);
 
-    Console.Log(`(/) Loaded modal ${config.customId}`);
     modals.set(config.customId, { config, run });
   }
 
-  Console.Log(`(/) Loaded ${modals.size} modals successfully`);
   return modals;
 };
 

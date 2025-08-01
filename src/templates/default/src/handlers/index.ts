@@ -53,7 +53,7 @@ export class HandlersManager {
     for (const task of this.setupTasks) {
       await task();
     }
-    Console.Log("All handlers have been set up successfully.");
+    Console.Log("✅ All handlers initialized successfully");
     this.setupTasks = [];
   }
 }

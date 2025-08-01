@@ -27,13 +27,14 @@ const setupEventFiles = async () => {
         `Duplicate event ${config.name}${config.once ? " (once)" : ""}`
       );
 
-    Console.Log(
-      `(/) Loaded event ${config.name}${config.once ? " (once)" : ""}`
-    );
     events.set(eventKey, { config, run });
   }
 
-  Console.Log(`(/) Loaded ${events.size} events successfully`);
+  if (events.size > 0) {
+    Console.Log(
+      `📡 Loaded ${events.size} event${events.size === 1 ? "" : "s"}`
+    );
+  }
   return events;
 };
 
@@ -44,9 +45,6 @@ const registerEvents = (events: EventsMap) => {
     } else {
       client.on(config.name, run);
     }
-    Console.Log(
-      `(+) Registered event ${config.name}${config.once ? " (once)" : ""}`
-    );
   }
 };
 
@@ -58,5 +56,4 @@ export const initEventHandler = async () => {
   }
 
   registerEvents(events);
-  Console.Log(`(+) Registered ${events.size} events`);
 };

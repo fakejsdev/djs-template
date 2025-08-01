@@ -22,11 +22,9 @@ export const setupButtonFiles = async () => {
     if (buttons.has(config.customId))
       throw new Error(`Duplicate button customId ${config.customId}`);
 
-    Console.Log(`(/) Loaded button ${config.customId}`);
     buttons.set(config.customId, { config, run });
   }
 
-  Console.Log(`(/) Loaded ${buttons.size} buttons successfully`);
   return buttons;
 };
 

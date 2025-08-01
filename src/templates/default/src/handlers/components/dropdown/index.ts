@@ -22,11 +22,9 @@ export const setupDropdownFiles = async () => {
     if (dropdowns.has(config.customId))
       throw new Error(`Duplicate dropdown customId ${config.customId}`);
 
-    Console.Log(`(/) Loaded dropdown ${config.customId}`);
     dropdowns.set(config.customId, { config, run });
   }
 
-  Console.Log(`(/) Loaded ${dropdowns.size} dropdowns successfully`);
   return dropdowns;
 };
 

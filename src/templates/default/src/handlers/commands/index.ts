@@ -22,10 +22,14 @@ const setupCommandFiles = async () => {
     if (commands.has(config.name))
       throw new Error(`Duplicate command name ${config.name}`);
 
-    Console.Log(`(/) Loaded command ${config.name}`);
     commands.set(config.name, { config, run });
   }
 
+  if (commands.size > 0) {
+    Console.Log(
+      `⚡ Loaded ${commands.size} command${commands.size === 1 ? "" : "s"}`
+    );
+  }
   return commands;
 };
 
@@ -37,17 +41,16 @@ const registerSlashCommand = async (commands: CommandsMap) => {
   if (!guild) throw new Error(`Guild with ID ${guildId} not found`);
 
   for (const [name, { config }] of commands) {
-    await guild.commands
-      .create(config)
-      .then(() => {
-        Console.Log(`(+) Registered command ${name}`);
-      })
-      .catch((err) => {
-        Console.Error(`Error registering command ${name} :`, err);
-      });
+    await guild.commands.create(config).catch((err) => {
+      Console.Error(`Error registering command ${name} :`, err);
+    });
   }
 
-  Console.Log(`(+) Registered ${commands.size} commands in ${guild.name}`);
+  Console.Log(
+    `🎯 Registered ${commands.size} command${
+      commands.size === 1 ? "" : "s"
+    } in ${guild.name}`
+  );
 };
 
 const startCommandHandling = async (commands: CommandsMap) => {
