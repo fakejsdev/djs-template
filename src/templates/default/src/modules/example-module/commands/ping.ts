@@ -11,24 +11,14 @@ import {
 
 export const config: CommandConfig = new SlashCommandBuilder()
   .setName("ping")
-  .setDescription("Replies with Pong!")
-  .addStringOption((option) =>
-    option
-      .setName("message")
-      .setDescription("Custom message to include with ping")
-      .setRequired(false)
-      .setAutocomplete(true)
-  );
+  .setDescription("Replies with Pong!");
 
 export const run: CommandRun = async (interaction) => {
   const customMessage = interaction.options.getString("message");
-  const messageContent = customMessage
-    ? `## Custom Ping!\n> ${customMessage}\n> Click the button below to check the custom modal.`
-    : "## Ping-Pong!\n> Click the button below to check\n> the custom modal.";
 
   const containerBuilder = new ContainerBuilder()
     .addTextDisplayComponents(
-      new TextDisplayBuilder().setContent(messageContent)
+      new TextDisplayBuilder().setContent("## Ping Pong!")
     )
     .setAccentColor(0x0099ff)
     .addActionRowComponents(
