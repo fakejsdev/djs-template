@@ -1,18 +1,16 @@
 import type { ClientEvents } from "discord.js";
 
 declare global {
-  type EventConfig<K extends keyof ClientEvents = keyof ClientEvents> = {
-    name: K;
+  type EventConfig = {
+    name: keyof ClientEvents;
     once?: boolean;
     description?: string;
   };
 
-  type EventRun<K extends keyof ClientEvents = keyof ClientEvents> = (
-    ...args: ClientEvents[K]
-  ) => Promise<void> | void;
+  type EventRun = (...args: any[]) => Promise<void> | void;
 
-  type EventConfigWithRun<K extends keyof ClientEvents = keyof ClientEvents> = {
-    config: EventConfig<K>;
-    run: EventRun<K>;
+  type EventConfigWithRun = {
+    config: EventConfig;
+    run: EventRun;
   };
 }
