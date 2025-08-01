@@ -129,17 +129,14 @@ mkdir -p src/modules/my-feature/{commands,events,components/{buttons,dropdowns,m
 ```typescript
 // src/modules/my-feature/commands/hello.ts
 import { SlashCommandBuilder } from "discord.js";
-import type { Command } from "@/handlers/commands/types";
 
-export default {
-  data: new SlashCommandBuilder()
-    .setName("hello")
-    .setDescription("Say hello to the world!"),
+export const config: CommandConfig = new SlashCommandBuilder()
+  .setName("hello")
+  .setDescription("Say hello to the world!");
 
-  async execute(interaction) {
-    await interaction.reply("Hello, World! 👋");
-  },
-} satisfies Command;
+export const run: CommandRun = async (interaction) => {
+  await interaction.reply("Hello, World! 👋");
+};
 ```
 
 ### **Step 3: Add Components**
