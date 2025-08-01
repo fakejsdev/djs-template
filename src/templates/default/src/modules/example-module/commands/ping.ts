@@ -13,7 +13,11 @@ export const config: CommandConfig = new SlashCommandBuilder()
 
 export const run: CommandRun = async (interaction) => {
   const containerBuilder = new ContainerBuilder()
-    .addTextDisplayComponents(new TextDisplayBuilder().setContent("### Pong!"))
+    .addTextDisplayComponents(
+      new TextDisplayBuilder().setContent(
+        "## Ping-Pong!\n> Click the button below to check\n> the bot response time."
+      )
+    )
     .setAccentColor(0x0099ff)
     .addActionRowComponents(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
