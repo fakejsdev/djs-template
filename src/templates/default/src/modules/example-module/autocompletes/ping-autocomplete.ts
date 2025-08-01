@@ -19,7 +19,7 @@ export const run: AutocompleteRun = async (interaction) => {
     choice.toLowerCase().includes(focusedValue.toLowerCase())
   );
 
-  await interaction.respond(
+  return await interaction.respond(
     choices.slice(0, 25).map((choice) => ({ name: choice, value: choice }))
   );
 };
