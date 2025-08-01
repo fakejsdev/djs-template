@@ -1,6 +1,7 @@
 import { Console } from "@/lib/utils";
-import { initCommandHandler } from "./command";
+import { initCommandHandler } from "./commands";
 import { initComponentsHandler } from "./components";
+import { initEventHandler } from "./events";
 
 export class HandlersManager {
   private setupTasks: (() => Promise<void>)[] = [];
@@ -29,7 +30,7 @@ export class HandlersManager {
     this.queuedHandlers.add("events");
 
     this.setupTasks.push(async () => {
-      Console.Log("Event handler setup is not implemented yet.");
+      await initEventHandler();
     });
     return this;
   }
