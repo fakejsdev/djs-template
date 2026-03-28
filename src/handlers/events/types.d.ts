@@ -10,4 +10,9 @@ declare global {
   type EventRun<T extends keyof ClientEvents> = (
     ...args: ClientEvents[T]
   ) => Promise<void> | void;
+
+  type EventConfigWithRun = {
+    config: EventConfig;
+    run: EventRun<any>;
+  };
 }

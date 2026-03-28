@@ -7,7 +7,7 @@ type EventsMap = Map<string, EventConfigWithRun>;
 const setupEventFiles = async () => {
   const events: EventsMap = new Map();
 
-  const eventFiles = globSync("src/modules/**/events/**/*.{js,ts}", {
+  const eventFiles = globSync("src/modules/**/events/discord/**/*.{js,ts}", {
     cwd: process.cwd(),
     ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
   });
