@@ -162,7 +162,7 @@ export const run: ButtonRun = async (interaction) => {
 ### **Step 4: Add Events**
 
 ```typescript
-// src/modules/my-feature/events/discord/message-logger.ts
+// src/modules/my-feature/events/message-logger.ts
 import { Events, type Message } from "discord.js";
 
 export const config: EventConfig = {
