@@ -163,14 +163,13 @@ export const run: ButtonRun = async (interaction) => {
 
 ```typescript
 // src/modules/my-feature/events/message-logger.ts
-import { Events, type Message } from "discord.js";
 
 export const config: EventConfig = {
-  name: Events.MessageCreate,
+  name: "messageCreate",
   description: "Logs every message sent in the server",
 };
 
-export const run = async (message: Message) => {
+export const run: EventRun<"messageCreate"> = async (message) => {
   if (message.author.bot) return;
   console.log(`[${message.author.tag}] ${message.content}`);
 };
