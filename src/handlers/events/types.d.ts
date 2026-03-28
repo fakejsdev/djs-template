@@ -7,10 +7,12 @@ declare global {
     description?: string;
   };
 
-  type EventRun = (...args: any[]) => Promise<void> | void;
+  type EventRun<T extends keyof ClientEvents> = (
+    ...args: ClientEvents[T]
+  ) => Promise<void> | void;
 
   type EventConfigWithRun = {
     config: EventConfig;
-    run: EventRun;
+    run: EventRun<any>;
   };
 }
