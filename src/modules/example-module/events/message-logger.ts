@@ -1,4 +1,4 @@
-import { createEvent } from "@/lib/createEvent";
+import { createEvent } from "@/lib/discord/createEvent";
 
 export const { config, run } = createEvent(
   {
@@ -9,5 +9,5 @@ export const { config, run } = createEvent(
     if (message.author.bot) return;
 
     console.log(`💬 ${message.author.tag}: ${message.content}`);
-  }
+  },
 );
