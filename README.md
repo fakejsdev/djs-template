@@ -52,10 +52,8 @@ modules/
 │   │   ├── profile.ts   # /profile command
 │   │   └── settings.ts  # /settings command
 │   ├── events/
-│   │   ├── discord/     # Discord API events
-│   │   │   └── userJoin.ts
-│   │   └── db/          # Database trigger events
-│   │       └── userCreate.ts
+│   │   └── discord/     # Discord API events
+│   │       └── userJoin.ts
 │   └── components/
 │       ├── buttons/
 │       │   └── edit-profile.ts
