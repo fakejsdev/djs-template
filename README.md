@@ -52,7 +52,10 @@ modules/
 │   │   ├── profile.ts   # /profile command
 │   │   └── settings.ts  # /settings command
 │   ├── events/
-│   │   └── userJoin.ts  # Welcome new users
+│   │   ├── discord/     # Discord API events
+│   │   │   └── userJoin.ts
+│   │   └── db/          # Database trigger events
+│   │       └── userCreate.ts
 │   └── components/
 │       ├── buttons/
 │       │   └── edit-profile.ts
@@ -66,7 +69,8 @@ modules/
 │   │   ├── kick.ts
 │   │   └── timeout.ts
 │   ├── events/
-│   │   └── automod.ts
+│   │   └── discord/
+│   │       └── automod.ts
 │   └── components/
 │       └── buttons/
 │           └── appeal-button.ts
@@ -160,14 +164,18 @@ export const run: ButtonRun = async (interaction) => {
 ### **Step 4: Add Events**
 
 ```typescript
-// src/modules/my-feature/events/message-logger.ts
-import { createEvent } from "@/lib/createEvent";
+// src/modules/my-feature/events/discord/message-logger.ts
+import { Events, type Message } from "discord.js";
 
-export default createEvent("messageCreate", async (message) => {
+export const config: EventConfig = {
+  name: Events.MessageCreate,
+  description: "Logs every message sent in the server",
+};
+
+export const run = async (message: Message) => {
   if (message.author.bot) return;
-
-  console.log(`Message from ${message.author.tag}: ${message.content}`);
-});
+  console.log(`[${message.author.tag}] ${message.content}`);
+};
 ```
 
 ## 🛠️ Available Scripts
@@ -175,9 +183,12 @@ export default createEvent("messageCreate", async (message) => {
 ### **With Bun (Recommended)**
 
 ```bash
-bun run dev      # ⚡ Development with hot reload
-bun run build    # 🏗️ Build for production
-bun run start    # 🚀 Run the application
+bun run dev             # ⚡ Development with hot reload
+bun run build           # 🏗️ Build for production
+bun run start           # 🚀 Run the application
+bun run db:generate     # 🗄️ Generate Prisma client
+bun run db:push         # 🔄 Synchronize database schema (SQLite)
+bun run db:studio       # 📊 Open Prisma database GUI
 ```
 
 ### **With npm/yarn**
