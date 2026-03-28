@@ -1,6 +1,6 @@
 import { Console } from "@/lib/utils";
 import { HandlersManager } from "./handlers";
-import { client } from "@lib/client";
+import { client } from "@/lib/discord";
 
 const manager = new HandlersManager()
   .setupEventHandler()

@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/prisma/generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Define your data models here
+// For example, a simple Post model:
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

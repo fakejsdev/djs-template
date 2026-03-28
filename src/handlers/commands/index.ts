@@ -1,5 +1,5 @@
 import { Console } from "@/lib/utils";
-import { client } from "@lib/client";
+import { client } from "@/lib/discord";
 import { globSync } from "glob";
 
 type CommandsMap = Map<string, CommandConfigWithRun>;
@@ -27,7 +27,7 @@ const setupCommandFiles = async () => {
 
   if (commands.size > 0) {
     Console.Log(
-      `⚡ Loaded ${commands.size} command${commands.size === 1 ? "" : "s"}`
+      `⚡ Loaded ${commands.size} command${commands.size === 1 ? "" : "s"}`,
     );
   }
   return commands;
@@ -49,7 +49,7 @@ const registerSlashCommand = async (commands: CommandsMap) => {
   Console.Log(
     `🎯 Registered ${commands.size} command${
       commands.size === 1 ? "" : "s"
-    } in ${guild.name}`
+    } in ${guild.name}`,
   );
 };
 

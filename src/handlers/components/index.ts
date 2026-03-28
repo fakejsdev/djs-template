@@ -1,5 +1,5 @@
 import { Console } from "@/lib/utils";
-import { client } from "@/lib/client";
+import { client } from "@/lib/discord";
 import { globSync } from "glob";
 import path from "path";
 
@@ -38,7 +38,7 @@ const discoverComponentHandlers = async () => {
         });
       } else {
         Console.Warn(
-          `Skipping ${componentType} - missing setup or handle function`
+          `Skipping ${componentType} - missing setup or handle function`,
         );
       }
     } catch (error) {
@@ -73,7 +73,7 @@ const setupComponentHandlers = async () => {
     Console.Log(
       `🧩 Loaded ${totalComponents} component${
         totalComponents === 1 ? "" : "s"
-      }`
+      }`,
     );
   }
 };

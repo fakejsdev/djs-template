@@ -1,5 +1,5 @@
 import { Console } from "@/lib/utils";
-import { client } from "@/lib/client";
+import { client } from "@/lib/discord";
 import { globSync } from "glob";
 
 type EventsMap = Map<string, EventConfigWithRun>;
@@ -7,7 +7,7 @@ type EventsMap = Map<string, EventConfigWithRun>;
 const setupEventFiles = async () => {
   const events: EventsMap = new Map();
 
-  const eventFiles = globSync("src/modules/**/events/**/*.{js,ts}", {
+  const eventFiles = globSync("src/modules/**/events/discord/**/*.{js,ts}", {
     cwd: process.cwd(),
     ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
   });
@@ -24,7 +24,7 @@ const setupEventFiles = async () => {
 
     if (events.has(eventKey))
       throw new Error(
-        `Duplicate event ${config.name}${config.once ? " (once)" : ""}`
+        `Duplicate event ${config.name}${config.once ? " (once)" : ""}`,
       );
 
     events.set(eventKey, { config, run });
@@ -32,7 +32,7 @@ const setupEventFiles = async () => {
 
   if (events.size > 0) {
     Console.Log(
-      `📡 Loaded ${events.size} event${events.size === 1 ? "" : "s"}`
+      `📡 Loaded ${events.size} event${events.size === 1 ? "" : "s"}`,
     );
   }
   return events;
