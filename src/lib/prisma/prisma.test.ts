@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 // Be sure to remove this, after you remove test Post model from schema.prisma
 
-describe("CRUD Operations for Posts Test Modal", () => {
+describe("CRUD Operations for Posts Test Model", () => {
   const postData = {
     title: "Test Post",
     content: "This is a test post.",
