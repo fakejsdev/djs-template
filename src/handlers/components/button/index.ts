@@ -7,7 +7,7 @@ type ButtonsMap = Map<string, ButtonConfigWithRun>;
 const buttons: ButtonsMap = new Map();
 
 export const setupButtonFiles = async () => {
-	const buttonFiles = globSync("src/modules/**/buttons/**/*.{js,ts}", {
+	const buttonFiles = globSync("src/modules/**/components/buttons/**/*.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});
