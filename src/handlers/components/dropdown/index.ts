@@ -1,3 +1,4 @@
+import path from "node:path";
 import { globSync } from "glob";
 import { Console } from "@/lib/utils";
 
@@ -14,7 +15,9 @@ export const setupDropdownFiles = async () => {
 	if (!dropdownFiles.length) return dropdowns;
 
 	for (const file of dropdownFiles) {
-		const { config, run }: DropdownConfigWithRun = await import(file);
+		const { config, run }: DropdownConfigWithRun = await import(
+			path.resolve(file)
+		);
 
 		if (!config || !run)
 			throw new Error("Dropdown file must export both config and run");

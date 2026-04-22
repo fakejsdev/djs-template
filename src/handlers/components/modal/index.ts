@@ -1,3 +1,4 @@
+import path from "node:path";
 import { globSync } from "glob";
 import { Console } from "@/lib/utils";
 
@@ -14,7 +15,9 @@ export const setupModalFiles = async () => {
 	if (!modalFiles.length) return modals;
 
 	for (const file of modalFiles) {
-		const { config, run }: ModalConfigWithRun = await import(file);
+		const { config, run }: ModalConfigWithRun = await import(
+			path.resolve(file)
+		);
 
 		if (!config || !run)
 			throw new Error("Modal file must export both config and run");

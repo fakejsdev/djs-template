@@ -1,3 +1,4 @@
+import path from "node:path";
 import { globSync } from "glob";
 import { Console } from "@/lib/utils";
 
@@ -14,7 +15,9 @@ export const setupButtonFiles = async () => {
 	if (!buttonFiles.length) return buttons;
 
 	for (const file of buttonFiles) {
-		const { config, run }: ButtonConfigWithRun = await import(file);
+		const { config, run }: ButtonConfigWithRun = await import(
+			path.resolve(file)
+		);
 
 		if (!config || !run)
 			throw new Error("Button file must export both config and run");

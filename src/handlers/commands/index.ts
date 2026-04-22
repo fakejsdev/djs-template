@@ -1,3 +1,4 @@
+import path from "node:path";
 import { globSync } from "glob";
 import { client } from "@/lib/discord";
 import { Console } from "@/lib/utils";
@@ -14,7 +15,9 @@ const setupCommandFiles = async () => {
 	if (!commandFiles.length) return commands;
 
 	for (const file of commandFiles) {
-		const { config, run }: CommandConfigWithRun = await import(file);
+		const { config, run }: CommandConfigWithRun = await import(
+			path.resolve(file)
+		);
 
 		if (!config || !run)
 			throw new Error("Command file must export both config and run");
