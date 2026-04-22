@@ -27,10 +27,9 @@
     "noPropertyAccessFromIndexSignature": false,
 
     // Paths
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@lib/*": ["src/lib/*"]
+      "@/*": ["./src/*"],
+      "@lib/*": ["./src/lib/*"]
     }
   }
 }
