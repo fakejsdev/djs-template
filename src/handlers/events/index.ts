@@ -1,3 +1,4 @@
+import path from "node:path";
 import { globSync } from "glob";
 import { client } from "@/lib/discord";
 import { Console } from "@/lib/utils";
@@ -15,7 +16,9 @@ const setupEventFiles = async () => {
 	if (!eventFiles.length) return events;
 
 	for (const file of eventFiles) {
-		const { config, run }: EventConfigWithRun = await import(file);
+		const { config, run }: EventConfigWithRun = await import(
+			path.resolve(file)
+		);
 
 		if (!config || !run)
 			throw new Error("Event file must export both config and run");
