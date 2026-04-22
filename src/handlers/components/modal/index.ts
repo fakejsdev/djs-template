@@ -7,7 +7,7 @@ type ModalsMap = Map<string, ModalConfigWithRun>;
 const modals: ModalsMap = new Map();
 
 export const setupModalFiles = async () => {
-	const modalFiles = globSync("src/modules/**/modals/**/*.{js,ts}", {
+	const modalFiles = globSync("src/modules/**/components/modals/**/*.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});
