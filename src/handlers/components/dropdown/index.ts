@@ -7,10 +7,13 @@ type DropdownsMap = Map<string, DropdownConfigWithRun>;
 const dropdowns: DropdownsMap = new Map();
 
 export const setupDropdownFiles = async () => {
-	const dropdownFiles = globSync("src/modules/**/dropdowns/**/*.{js,ts}", {
-		cwd: process.cwd(),
-		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
-	});
+	const dropdownFiles = globSync(
+		"src/modules/**/components/dropdowns/**/*.{js,ts}",
+		{
+			cwd: process.cwd(),
+			ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
+		},
+	);
 
 	if (!dropdownFiles.length) return dropdowns;
 
