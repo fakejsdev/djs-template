@@ -35,3 +35,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Prisma generated client
 src/lib/prisma/generated
+
+# Database
+src/db/discord.db
