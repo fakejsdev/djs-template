@@ -30,7 +30,7 @@ const setupCommandFiles = async () => {
 
 	if (commands.size > 0) {
 		Console.Log(
-			`⚡ Loaded ${commands.size} command${commands.size === 1 ? "" : "s"}`,
+			`🔧 Loaded ${commands.size} command${commands.size === 1 ? "" : "s"}`,
 		);
 	}
 	return commands;
