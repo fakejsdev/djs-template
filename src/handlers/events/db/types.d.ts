@@ -1,26 +1,30 @@
 import type { Prisma } from "@lib/prisma/generated/client";
 
 declare global {
-	type DbAction = "Create" | "Update" | "Delete";
+	type DatabaseAction = "Create" | "Update" | "Delete";
 
-	type DbEventName = `${Prisma.ModelName}.${DbAction}`;
+	type DatabaseEventName = `${Prisma.ModelName}.${DatabaseAction}`;
 
 	type PayloadType<T extends string> = T extends Prisma.ModelName
 		? Prisma.TypeMap["model"][T]["payload"]["scalars"]
 		: never;
 
-	type DbEventConfig<T extends DbEventName = DbEventName> = {
+	type DatabaseEventConfig<T extends DatabaseEventName = DatabaseEventName> = {
 		name: string;
 		on: T;
 		description?: string;
 	};
 
-	type DbEventRun<T extends DbEventName = DbEventName> = (
-		data: T extends `${infer Model}.${DbAction}` ? PayloadType<Model> : unknown,
+	type DatabaseEventRun<T extends DatabaseEventName = DatabaseEventName> = (
+		data: T extends `${infer Model}.${DatabaseAction}`
+			? PayloadType<Model>
+			: unknown,
 	) => Promise<void> | void;
 
-	type DbEventConfigWithRun<T extends DbEventName = DbEventName> = {
-		config: DbEventConfig<T>;
-		run: DbEventRun<T>;
+	type DatabaseEventConfigWithRun<
+		T extends DatabaseEventName = DatabaseEventName,
+	> = {
+		config: DatabaseEventConfig<T>;
+		run: DatabaseEventRun<T>;
 	};
 }
