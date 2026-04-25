@@ -1,4 +1,5 @@
 import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { dbEmitter } from "@/lib/helpers/databaseEmitter";
 import { PrismaClient } from "./generated/client";
 
 const adapter = new PrismaLibSql({
@@ -13,21 +14,23 @@ const prismaClientSingleton = () => {
 			$allModels: {
 				async create({ model, args, query }) {
 					const result = await query(args);
+					dbEmitter.emit(`${model}.Create`, result);
 					return result;
 				},
 				async update({ model, args, query }) {
 					const result = await query(args);
+					dbEmitter.emit(`${model}.Update`, result);
 					return result;
 				},
 				async delete({ model, args, query }) {
 					const result = await query(args);
+					dbEmitter.emit(`${model}.Delete`, result);
 					return result;
 				},
 			},
 		},
 	});
 };
-
 type PrismaClientExtended = ReturnType<typeof prismaClientSingleton>;
 
 const globalForPrisma = globalThis as unknown as {
