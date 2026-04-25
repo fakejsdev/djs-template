@@ -1,7 +1,8 @@
-import type { StringSelectMenuInteraction } from "discord.js";
+import type { CacheType, StringSelectMenuInteraction } from "discord.js";
 
 declare global {
-  type DropdownInteraction = StringSelectMenuInteraction<"cached">;
+  type DropdownInteraction<T extends CacheType = CacheType> =
+    StringSelectMenuInteraction<T>;
 
   type DropdownConfig = {
     customId: string;

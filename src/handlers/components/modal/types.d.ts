@@ -1,7 +1,8 @@
 import type { ModalSubmitInteraction } from "discord.js";
 
 declare global {
-  type ModalInteraction = ModalSubmitInteraction<"cached">;
+  type ModalInteraction<T extends CacheType = CacheType> =
+    ModalSubmitInteraction<T>;
 
   type ModalConfig = {
     customId: string;
