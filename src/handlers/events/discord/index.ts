@@ -51,7 +51,7 @@ const registerEvents = (events: DiscordEventsMap) => {
 	}
 };
 
-export const initEventHandler = async () => {
+export const initDiscordEventHandler = async () => {
 	const events = await setupDiscordEventFiles();
 	if (!events.size) {
 		Console.Warn("No events found, skipping event registration.");
