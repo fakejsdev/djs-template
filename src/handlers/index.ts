@@ -1,7 +1,8 @@
 import { Console } from "@/lib/utils";
 import { initCommandHandler } from "./commands";
 import { initComponentsHandler } from "./components";
-import { initEventHandler } from "./events/discord";
+import { initDatabaseEventHandler } from "./events/db";
+import { initDiscordEventHandler } from "./events/discord";
 
 export class HandlersManager {
 	private setupTasks: (() => Promise<void>)[] = [];
@@ -21,7 +22,7 @@ export class HandlersManager {
 		return this;
 	}
 
-	public setupEventHandler() {
+	public setupDiscordEventHandler() {
 		if (this.queuedHandlers.has("events")) {
 			Console.Warn("Event handler already queued");
 			return this;
@@ -30,7 +31,21 @@ export class HandlersManager {
 		this.queuedHandlers.add("events");
 
 		this.setupTasks.push(async () => {
-			await initEventHandler();
+			await initDiscordEventHandler();
+		});
+		return this;
+	}
+
+	public setupDatabaseEventHandler() {
+		if (this.queuedHandlers.has("databaseEvents")) {
+			Console.Warn("Database event handler already queued");
+			return this;
+		}
+
+		this.queuedHandlers.add("databaseEvents");
+
+		this.setupTasks.push(async () => {
+			await initDatabaseEventHandler();
 		});
 		return this;
 	}
