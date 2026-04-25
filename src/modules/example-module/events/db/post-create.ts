@@ -1,4 +1,5 @@
 import { createDatabaseEvent } from "@/lib/helpers/createDatabaseEvent";
+import { Console } from "@/lib/utils";
 
 export const { config, run } = createDatabaseEvent(
 	{
@@ -7,6 +8,6 @@ export const { config, run } = createDatabaseEvent(
 		description: "Do smth on post create",
 	},
 	async (payload) => {
-		console.log(payload.content);
+		Console.Log("Post created with payload:", payload);
 	},
 );
