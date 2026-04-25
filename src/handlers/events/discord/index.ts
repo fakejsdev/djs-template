@@ -5,7 +5,7 @@ import { Console } from "@/lib/utils";
 
 type DiscordEventsMap = Map<string, DiscordEventConfigWithRun>;
 
-const setupDbEventFiles = async () => {
+const setupDiscordEventFiles = async () => {
 	const events: DiscordEventsMap = new Map();
 
 	const eventFiles = globSync("src/modules/**/events/discord/**/*.{js,ts}", {
@@ -52,7 +52,7 @@ const registerEvents = (events: DiscordEventsMap) => {
 };
 
 export const initEventHandler = async () => {
-	const events = await setupDbEventFiles();
+	const events = await setupDiscordEventFiles();
 	if (!events.size) {
 		Console.Warn("No events found, skipping event registration.");
 		return;
