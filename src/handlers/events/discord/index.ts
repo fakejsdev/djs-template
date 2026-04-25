@@ -44,9 +44,9 @@ const setupDiscordEventFiles = async () => {
 const registerEvents = (events: DiscordEventsMap) => {
 	for (const [, { config, run }] of events) {
 		if (config.once) {
-			client.once(config.name, run);
+			client.once(config.on, run);
 		} else {
-			client.on(config.name, run);
+			client.on(config.on, run);
 		}
 	}
 };
