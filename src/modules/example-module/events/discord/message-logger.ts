@@ -1,8 +1,13 @@
-export const config: EventConfig = {
-	name: "messageCreate",
-	description: "Logs every message sent in the server",
-};
+import { createDiscordEvent } from "@/lib/helpers/createDiscordEvent";
 
-export const run: EventRun<"messageCreate"> = async (message) => {
-	console.log(`[${message.author.tag}] ${message.content}`);
-};
+export const { config, run } = createDiscordEvent(
+	{
+		name: "Message Logger",
+		on: "messageCreate",
+		description: "Logs messages to the console.",
+	},
+	async (message) => {
+		if (message.author.bot) return;
+		console.log(`[${message.author.tag}] ${message.content}`);
+	},
+);

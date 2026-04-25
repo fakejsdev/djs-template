@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export const config: CommandConfig = new SlashCommandBuilder()
 	.setName("create-post")

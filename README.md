@@ -1,6 +1,6 @@
 # 🚀 Discord.js Template
 
-> A powerful, modular Discord.js bot template with TypeScript support and modern development practices.
+> A powerful, modular Discord.js bot template with TypeScript support, modern development practices, and a built-in Database Event System.
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Discord.js](https://img.shields.io/badge/Discord.js-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.js.org/)
@@ -9,11 +9,12 @@
 ## ✨ Features
 
 - 🧩 **Modular Architecture** - Organized by modules for better maintainability
+- 🗄️ **Database Event System** - **[NEW]** Fully type-safe events for Prisma CRUD operations (Create, Update, Delete).
 - ⚡ **Hot Reload Development** - Instant feedback during development
 - 📦 **TypeScript Ready** - Full TypeScript support with proper types
 - 🎯 **Slash Commands** - Modern Discord slash command implementation
 - 🎨 **Component Handlers** - Buttons, dropdowns, and modals support
-- 📝 **Event System** - Clean event handling with type safety
+- 📝 **Dual Event System** - Clean handling for both Discord API events and Database lifecycle events.
 - 🔧 **Multi-Package Manager** - Works with bun, npm, and yarn
 
 ## 🏗️ Project Structure
@@ -22,65 +23,33 @@
 
 ```
 src/
-├── handlers/              # Core handlers
-│   ├── command/          # Command handler logic
+├── db/                   # Database & Prisma configuration
+│   ├── discord.db        # SQLite database file
+│   └── schema.prisma     # Prisma schema definition
+├── handlers/             # Core handlers
+│   ├── commands/         # Command handler logic
 │   ├── components/       # Component handler logic
-│   └── events/           # Event handler logic
+│   └── events/           # Event loader logic
+│       ├── db/           # Database event handler
+│       └── discord/      # Discord event handler
 ├── modules/              # 🧩 MODULAR APPROACH (Recommended)
 │   └── [module-name]/    # Each feature as a module
 │       ├── commands/     # Slash commands for this module
 │       ├── events/       # Events specific to this module
+│       │   ├── db/       # Database events (e.g., Post.Create)
+│       │   └── discord/  # Discord events (e.g., messageCreate)
 │       └── components/   # Components for this module
 │           ├── buttons/  # Button interactions
 │           ├── dropdowns/# Select menu interactions
 │           └── modals/   # Modal form interactions
 ├── lib/                  # Utility libraries
-│   ├── client.ts        # Discord client setup
-│   ├── createEvent.ts   # Event creation helper
-│   └── utils.ts         # General utilities
-└── index.ts             # Main entry point
-```
-
-### 🧩 **Module-Based Organization** (Recommended)
-
-Each module represents a specific feature or functionality:
-
-```
-modules/
-├── user-management/      # User-related features
-│   ├── commands/
-│   │   ├── profile.ts   # /profile command
-│   │   └── settings.ts  # /settings command
-│   ├── events/
-│   │   └── discord/     # Discord API events
-│   │       └── userJoin.ts
-│   └── components/
-│       ├── buttons/
-│       │   └── edit-profile.ts
-│       ├── dropdowns/
-│       │   └── timezone-select.ts
-│       └── modals/
-│           └── profile-edit.ts
-├── moderation/           # Moderation features
-│   ├── commands/
-│   │   ├── ban.ts
-│   │   ├── kick.ts
-│   │   └── timeout.ts
-│   ├── events/
-│   │   └── discord/
-│   │       └── automod.ts
-│   └── components/
-│       └── buttons/
-│           └── appeal-button.ts
-└── entertainment/        # Fun commands
-    ├── commands/
-    │   ├── meme.ts
-    │   └── game.ts
-    └── components/
-        ├── buttons/
-        │   └── play-again.ts
-        └── dropdowns/
-            └── game-select.ts
+│   ├── helpers/          # Creation helpers & emitters
+│   │   ├── createDatabaseEvent.ts # Helper for DB events
+│   │   ├── createDiscordEvent.ts  # Helper for Discord events
+│   │   └── databaseEmitter.ts     # Global DB event bridge
+│   ├── prisma/           # Generated Prisma client
+│   └── utils.ts          # General utilities
+└── index.ts              # Main entry point
 ```
 
 ## 🚀 Getting Started
@@ -94,8 +63,6 @@ cd djs-template
 
 # Install dependencies
 bun install
-# or npm install
-# or yarn install
 ```
 
 ### 2. **Environment Setup**
@@ -104,8 +71,9 @@ bun install
 # Copy environment file
 cp .env.example .env
 
-# Add your bot token
+# Add your bot token and database URL
 BOT_TOKEN=your_discord_bot_token_here
+DATABASE_URL="file:./src/db/discord.db"
 ```
 
 ### 3. **Development**
@@ -113,8 +81,6 @@ BOT_TOKEN=your_discord_bot_token_here
 ```bash
 # Start development server with hot reload
 bun run dev
-# or npm run dev
-# or yarn dev
 ```
 
 ## 📝 Creating Modules
@@ -122,10 +88,9 @@ bun run dev
 ### **Step 1: Create Module Structure**
 
 ```bash
-# Create a new module
-mkdir -p src/modules/my-feature/{commands,events,components/{buttons,dropdowns,modals}}
+# Create a new module with subfolders for events
+mkdir -p src/modules/my-feature/{commands,events/{db,discord},components/{buttons,dropdowns,modals}}
 ```
-
 ### **Step 2: Add Commands**
 
 ```typescript
@@ -159,20 +124,44 @@ export const run: ButtonRun = async (interaction) => {
 };
 ```
 
-### **Step 4: Add Events**
+### **Step 4: Add Discord Events**
+Use `createDiscordEvent` for full Discord event type support..
 
 ```typescript
 // src/modules/my-feature/events/discord/message-logger.ts
+import { createDiscordEvent } from "@/lib/helpers/createDiscordEvent";
 
-export const config: EventConfig = {
-  name: "messageCreate",
-  description: "Logs every message sent in the server",
-};
+export default createDiscordEvent(
+  {
+    name: "Message Logger",
+    on: "messageCreate",
+    description: "Logs every message sent in the server",
+  },
+  async (message) => {
+    if (message.author.bot) return;
+    console.log(`[${message.author.tag}] ${message.content}`);
+  }
+);
+```
 
-export const run: EventRun<"messageCreate"> = async (message) => {
-  if (message.author.bot) return;
-  console.log(`[${message.author.tag}] ${message.content}`);
-};
+### **Step 5: Add Database Events [NEW]**
+Database events are automatically typed based on your Prisma schema.
+
+```typescript
+// src/modules/my-feature/events/db/post-create.ts
+import { createDatabaseEvent } from "@/lib/helpers/createDatabaseEvent";
+
+export default createDatabaseEvent(
+  {
+    name: "Post Creation Logger",
+    on: "Post.Create",
+    description: "Triggers when a new post is created in the database",
+  },
+  async (data) => {
+    // 'data' is strictly typed to your Post model!
+    console.log(`New post created with ID: ${data.id}`);
+  }
+);
 ```
 
 ## 🛠️ Available Scripts
@@ -236,7 +225,10 @@ src/modules/example-module/
 │   └── modals/
 │       └── example-modal.ts
 └── events/
-    └── message-logger.ts    # Log messages
+    ├── db/                   # Database events
+    │   └── post-create.ts    # Logic for new post creation
+    └── discord/              # Discord API events
+        └── message-logger.ts # Logs messages to console
 ```
 
 ## 🎨 Component Types
