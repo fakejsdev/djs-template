@@ -1,6 +1,6 @@
 import { createDatabaseEvent } from "@/lib/helpers/createDatabaseEvent";
 
-const { config, run } = createDatabaseEvent(
+export const { config, run } = createDatabaseEvent(
 	{
 		name: "Example Post Create Event",
 		on: "Post.Create",
