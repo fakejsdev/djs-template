@@ -9,25 +9,23 @@ const dropdowns: DropdownsMap = new Map();
 const dropdownOptions: DropdownOptionsMap = new Map();
 
 export const setupDropdownFiles = async () => {
-	const dropdownFiles = globSync(
-		"src/modules/**/components/dropdowns/**/*.{js,ts}",
-		{
-			cwd: process.cwd(),
-			ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
-		},
-	);
+	const dropdownFiles = globSync("src/modules/**/*.{dropdown,option}.{js,ts}", {
+		cwd: process.cwd(),
+		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
+	});
 
 	const allComponentsCount = new Map<string, DropdownConfigWithRun>();
 	if (!dropdownFiles.length) return allComponentsCount;
 
 	for (const file of dropdownFiles) {
-		const { config, run }: DropdownConfigWithRun = await import(
-			path.resolve(file)
-		);
+		const module = await import(path.resolve(file));
+		const dropdownData: DropdownConfigWithRun = module.default || module;
+		const config = dropdownData?.config;
+		const run = dropdownData?.run;
 
 		if (!config || !run)
 			throw new Error(
-				`Dropdown file must export both config and run (Error in: ${file})`,
+				`Dropdown file must export both config and run (Error in: ${file}, preferably as default using createDropdown)`,
 			);
 
 		if (config.customId) {

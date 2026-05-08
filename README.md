@@ -13,7 +13,7 @@
 - ⚡ **Hot Reload Development** - Instant feedback during development
 - 📦 **TypeScript Ready** - Full TypeScript support with proper types
 - 🎯 **Slash Commands** - Modern Discord slash command implementation
-- 🎨 **Component Handlers** - Buttons, dropdowns, and modals support
+- 🎨 **Component Handlers** - Buttons and dropdowns support
 - 📝 **Dual Event System** - Clean handling for both Discord API events and Database lifecycle events.
 - 🔧 **Multi-Package Manager** - Works with bun, npm, and yarn
 
@@ -89,7 +89,7 @@ bun run dev
 
 ```bash
 # Create a new module with subfolders for events
-mkdir -p src/modules/my-feature/{commands,events/{db,discord},components/{buttons,dropdowns,modals}}
+mkdir -p src/modules/my-feature
 ```
 ### **Step 2: Add Commands**
 

@@ -8,24 +8,25 @@ type CommandsMap = Map<string, CommandConfigWithRun>;
 const setupCommandFiles = async () => {
 	const commands: CommandsMap = new Map();
 
-	const commandFiles = globSync("src/modules/**/commands/**/*.{js,ts}", {
+	const commandFiles = globSync("src/modules/**/*.command.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});
 	if (!commandFiles.length) return commands;
 
 	for (const file of commandFiles) {
-		const { config, run }: CommandConfigWithRun = await import(
-			path.resolve(file)
-		);
+		const module = await import(path.resolve(file));
+		const commandData: CommandConfigWithRun = module.default || module;
 
-		if (!config || !run)
-			throw new Error("Command file must export both config and run");
+		if (!commandData?.config || !commandData?.run)
+			throw new Error(
+				`Command file ${file} must export config and run (preferably as default using createCommand)`,
+			);
 
-		if (commands.has(config.name))
-			throw new Error(`Duplicate command name ${config.name}`);
+		if (commands.has(commandData.config.name))
+			throw new Error(`Duplicate command name ${commandData.config.name}`);
 
-		commands.set(config.name, { config, run });
+		commands.set(commandData.config.name, commandData);
 	}
 
 	if (commands.size > 0) {

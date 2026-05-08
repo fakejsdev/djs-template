@@ -8,7 +8,7 @@ type DiscordEventsMap = Map<string, DiscordEventConfigWithRun>;
 const setupDiscordEventFiles = async () => {
 	const events: DiscordEventsMap = new Map();
 
-	const eventFiles = globSync("src/modules/**/events/discord/**/*.{js,ts}", {
+	const eventFiles = globSync("src/modules/**/*.djs.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});
@@ -16,12 +16,15 @@ const setupDiscordEventFiles = async () => {
 	if (!eventFiles.length) return events;
 
 	for (const file of eventFiles) {
-		const { config, run }: DiscordEventConfigWithRun = await import(
-			path.resolve(file)
-		);
+		const module = await import(path.resolve(file));
+		const eventData: DiscordEventConfigWithRun = module.default || module;
+		const config = eventData?.config;
+		const run = eventData?.run;
 
 		if (!config || !run)
-			throw new Error("Discord event file must export both config and run");
+			throw new Error(
+				`Discord event file must export both config and run (preferably as default using createDiscordEvent). File: ${file}`,
+			);
 
 		const eventKey = `${config.name}${config.once ? "_once" : ""}`;
 
