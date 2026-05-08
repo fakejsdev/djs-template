@@ -250,8 +250,10 @@ export const run: ButtonRun = async (interaction) => {
 
 ### **Dropdowns**
 
+You can handle the entire dropdown at once or handle specific options individually.
+
 ```typescript
-// Select menus
+// 1. Classic: Handle the entire dropdown menus
 export const config: DropdownConfig = {
   customId: "my_dropdown",
   name: "My Dropdown",
@@ -259,7 +261,20 @@ export const config: DropdownConfig = {
 };
 
 export const run: DropdownRun = async (interaction) => {
-  // Handle selection
+  // Handle any selection
+};
+```
+
+```typescript
+// 2. Specific Option: Route based on the selected value
+export const config: DropdownConfig = {
+  parentCustomId: "my_dropdown", // ID of the parent select menu
+  value: "specific_option",      // The exact value of the option selected
+  name: "My Dropdown - Specific Option",
+};
+
+export const run: DropdownRun = async (interaction) => {
+  // Triggered ONLY when 'specific_option' is selected in 'my_dropdown'
 };
 ```
 
