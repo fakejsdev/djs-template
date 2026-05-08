@@ -7,7 +7,7 @@ type ButtonsMap = Map<string, ButtonConfigWithRun>;
 const buttons: ButtonsMap = new Map();
 
 export const setupButtonFiles = async () => {
-	const buttonFiles = globSync("src/modules/**/components/buttons/**/*.{js,ts}", {
+	const buttonFiles = globSync("src/modules/**/*.button.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});
@@ -15,17 +15,20 @@ export const setupButtonFiles = async () => {
 	if (!buttonFiles.length) return buttons;
 
 	for (const file of buttonFiles) {
-		const { config, run }: ButtonConfigWithRun = await import(
-			path.resolve(file)
-		);
+		const module = await import(path.resolve(file));
+		const buttonData: ButtonConfigWithRun = module.default || module;
 
-		if (!config || !run)
-			throw new Error("Button file must export both config and run");
+		if (!buttonData?.config || !buttonData?.run)
+			throw new Error(
+				`Button file ${file} must export config and run (preferably as default using createButton)`,
+			);
 
-		if (buttons.has(config.customId))
-			throw new Error(`Duplicate button customId ${config.customId}`);
+		if (buttons.has(buttonData.config.customId))
+			throw new Error(
+				`Duplicate button customId ${buttonData.config.customId}`,
+			);
 
-		buttons.set(config.customId, { config, run });
+		buttons.set(buttonData.config.customId, buttonData);
 	}
 
 	return buttons;

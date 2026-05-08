@@ -8,7 +8,7 @@ type DatabaseEventsMap = Map<string, DatabaseEventConfigWithRun>;
 const setupDatabaseEventFiles = async () => {
 	const events: DatabaseEventsMap = new Map();
 
-	const eventFiles = globSync("src/modules/**/events/db/**/*.{js,ts}", {
+	const eventFiles = globSync("src/modules/**/*.db.{js,ts}", {
 		cwd: process.cwd(),
 		ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
 	});

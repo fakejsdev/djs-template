@@ -53,7 +53,6 @@ const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 const createInteractionChecker = (type: string) => {
 	const checkers: Record<string, (interaction: Interaction) => boolean> = {
 		button: (i) => i.isButton(),
-		modal: (i) => i.isModalSubmit(),
 		dropdown: (i) => i.isStringSelectMenu(),
 	};
 
