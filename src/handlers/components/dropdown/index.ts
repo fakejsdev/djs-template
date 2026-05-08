@@ -3,8 +3,10 @@ import { globSync } from "glob";
 import { Console } from "@/lib/utils";
 
 type DropdownsMap = Map<string, DropdownConfigWithRun>;
+type DropdownOptionsMap = Map<string, Map<string, DropdownConfigWithRun>>;
 
 const dropdowns: DropdownsMap = new Map();
+const dropdownOptions: DropdownOptionsMap = new Map();
 
 export const setupDropdownFiles = async () => {
 	const dropdownFiles = globSync(
@@ -15,7 +17,8 @@ export const setupDropdownFiles = async () => {
 		},
 	);
 
-	if (!dropdownFiles.length) return dropdowns;
+	const allComponentsCount = new Map<string, DropdownConfigWithRun>();
+	if (!dropdownFiles.length) return allComponentsCount;
 
 	for (const file of dropdownFiles) {
 		const { config, run }: DropdownConfigWithRun = await import(
@@ -23,23 +26,64 @@ export const setupDropdownFiles = async () => {
 		);
 
 		if (!config || !run)
-			throw new Error("Dropdown file must export both config and run");
+			throw new Error(
+				`Dropdown file must export both config and run (Error in: ${file})`,
+			);
 
-		if (dropdowns.has(config.customId))
-			throw new Error(`Duplicate dropdown customId ${config.customId}`);
+		if (config.customId) {
+			if (dropdowns.has(config.customId))
+				throw new Error(`Duplicate dropdown customId: ${config.customId}`);
+			dropdowns.set(config.customId, { config, run });
+			allComponentsCount.set(config.customId, { config, run });
+		} else if (config.parentCustomId && config.value) {
+			let parentOptions = dropdownOptions.get(config.parentCustomId);
+			if (!parentOptions) {
+				parentOptions = new Map();
+				dropdownOptions.set(config.parentCustomId, parentOptions);
+			}
 
-		dropdowns.set(config.customId, { config, run });
+			if (parentOptions.has(config.value)) {
+				throw new Error(
+					`Duplicate option value '${config.value}' for '${config.parentCustomId}'`,
+				);
+			}
+			parentOptions.set(config.value, { config, run });
+			allComponentsCount.set(`${config.parentCustomId}:${config.value}`, {
+				config,
+				run,
+			});
+		} else {
+			throw new Error(
+				`Missing 'customId' OR 'parentCustomId' and 'value' in config (Error in: ${file})`,
+			);
+		}
 	}
 
-	return dropdowns;
+	return allComponentsCount;
 };
 
-export const handleDropdownInteraction = async (i: DropdownInteraction) => {
-	const dropdown = dropdowns.get(i.customId);
-	if (!dropdown) return;
-
+export const handleDropdownInteraction = async (
+	i: DropdownInteraction<"cached">,
+) => {
 	try {
-		await dropdown.run(i);
+		const selectedValue = i.values[0];
+		const parentOptionsMap = dropdownOptions.get(i.customId);
+
+		if (selectedValue && parentOptionsMap?.has(selectedValue)) {
+			const optionHandler = parentOptionsMap.get(selectedValue);
+			await optionHandler!.run(i);
+			return;
+		}
+
+		const baseDropdown = dropdowns.get(i.customId);
+		if (baseDropdown) {
+			await baseDropdown.run(i);
+			return;
+		}
+
+		Console.Warn(
+			`No handler found for dropdown ${i.customId} and its option: ${selectedValue}`,
+		);
 	} catch (error) {
 		Console.Error(`Error running dropdown ${i.customId}`, error);
 	}
