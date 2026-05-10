@@ -20,7 +20,7 @@ const setupCommandFiles = async () => {
 
 		if (!commandData?.config || !commandData?.run)
 			throw new Error(
-				`Command file ${file} must export config and run `,
+				`Command file ${file} must export named \`config\` and \`run\``,
 			);
 
 		if (commands.has(commandData.config.name))
