@@ -1,5 +1,9 @@
-import { TextInputBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, ModalBuilder, TextInputStyle } from "discord.js";
+import {
+  ActionRowBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+} from "discord.js";
 
 export const config: ButtonConfig = {
   customId: "example-button",
