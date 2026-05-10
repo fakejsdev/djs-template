@@ -9,11 +9,11 @@
 ## ✨ Features
 
 - 🧩 **Modular Architecture** - Organized by modules for better maintainability
-- 🗄️ **Database Event System** - **[NEW]** Fully type-safe events for Prisma CRUD operations (Create, Update, Delete).
+- 🗄️ **Database Event System** - Fully type-safe events for Prisma CRUD operations (Create, Update, Delete).
 - ⚡ **Hot Reload Development** - Instant feedback during development
 - 📦 **TypeScript Ready** - Full TypeScript support with proper types
-- 🎯 **Slash Commands** - Modern Discord slash command implementation
-- 🎨 **Component Handlers** - Buttons and dropdowns support
+- 🎯 **Slash Commands** - Modern Discord slash commands via Named Exports (`config` & `run`)
+- 🎨 **Component Handlers** - Advanced and easy-to-use Buttons and Select Menus (Dropdown) routing
 - 📝 **Dual Event System** - Clean handling for both Discord API events and Database lifecycle events.
 - 🔧 **Multi-Package Manager** - Works with bun, npm, and yarn
 
@@ -24,7 +24,6 @@
 ```
 src/
 ├── db/                   # Database & Prisma configuration
-│   ├── discord.db        # SQLite database file
 │   └── schema.prisma     # Prisma schema definition
 ├── handlers/             # Core handlers
 │   ├── commands/         # Command handler logic
@@ -34,19 +33,17 @@ src/
 │       └── discord/      # Discord event handler
 ├── modules/              # 🧩 MODULAR APPROACH (Recommended)
 │   └── [module-name]/    # Each feature as a module
-│       ├── commands/     # Slash commands for this module
+│       ├── commands/     # Source for **/*.command.ts files
 │       ├── events/       # Events specific to this module
-│       │   ├── db/       # Database events (e.g., Post.Create)
-│       │   └── discord/  # Discord events (e.g., messageCreate)
-│       └── components/   # Components for this module
-│           ├── buttons/  # Button interactions
-│           ├── dropdowns/# Select menu interactions
-│           └── modals/   # Modal form interactions
+│       │   ├── [event].db.ts   # Database events
+│       │   └── [event].djs.ts  # Discord API events
+│       ├── buttons/      # Source for **/*.button.ts files
+│       └── dropdown/     # Dropdown logic files
+│           ├── example.fallback.ts # Base/fallback handler for the entire menu
+│           ├── example.dropdown.ts # Alternative base handler (same as .fallback.ts)
+│           └── option1.option.ts   # Dedicated handler for a specific option value
 ├── lib/                  # Utility libraries
-│   ├── helpers/          # Creation helpers & emitters
-│   │   ├── createDatabaseEvent.ts # Helper for DB events
-│   │   ├── createDiscordEvent.ts  # Helper for Discord events
-│   │   └── databaseEmitter.ts     # Global DB event bridge
+│   ├── helpers/          # Event helpers
 │   ├── prisma/           # Generated Prisma client
 │   └── utils.ts          # General utilities
 └── index.ts              # Main entry point
@@ -79,6 +76,9 @@ DATABASE_URL="file:./src/db/discord.db"
 ### 3. **Development**
 
 ```bash
+# Generate the DB client to enable Prisma types
+bun run db:generate
+
 # Start development server with hot reload
 bun run dev
 ```
@@ -88,13 +88,16 @@ bun run dev
 ### **Step 1: Create Module Structure**
 
 ```bash
-# Create a new module with subfolders for events
-mkdir -p src/modules/my-feature
+# Create a new module with flat substructures
+mkdir -p src/modules/my-feature/{commands,buttons,dropdown,events}
 ```
+
 ### **Step 2: Add Commands**
 
+Commands use Discord.js Builders through Named Exports — no wrapper function needed.
+
 ```typescript
-// src/modules/my-feature/commands/hello.ts
+// src/modules/my-feature/commands/hello.command.ts
 import { SlashCommandBuilder } from "discord.js";
 
 export const config: CommandConfig = new SlashCommandBuilder()
@@ -109,7 +112,7 @@ export const run: CommandRun = async (interaction) => {
 ### **Step 3: Add Components**
 
 ```typescript
-// src/modules/my-feature/components/buttons/hello-button.ts
+// src/modules/my-feature/buttons/hello.button.ts
 export const config: ButtonConfig = {
   customId: "hello_button",
   name: "Hello Button",
@@ -125,10 +128,11 @@ export const run: ButtonRun = async (interaction) => {
 ```
 
 ### **Step 4: Add Discord Events**
-Use `createDiscordEvent` for full Discord event type support..
+
+Use `createDiscordEvent` for full type support.
 
 ```typescript
-// src/modules/my-feature/events/discord/message-logger.ts
+// src/modules/my-feature/events/message-logger.djs.ts
 import { createDiscordEvent } from "@/lib/helpers/createDiscordEvent";
 
 export default createDiscordEvent(
@@ -144,11 +148,12 @@ export default createDiscordEvent(
 );
 ```
 
-### **Step 5: Add Database Events [NEW]**
+### **Step 5: Add Database Events**
+
 Database events are automatically typed based on your Prisma schema.
 
 ```typescript
-// src/modules/my-feature/events/db/post-create.ts
+// src/modules/my-feature/events/post-create.db.ts
 import { createDatabaseEvent } from "@/lib/helpers/createDatabaseEvent";
 
 export default createDatabaseEvent(
@@ -177,58 +182,21 @@ bun run db:push         # 🔄 Synchronize database schema (SQLite)
 bun run db:studio       # 📊 Open Prisma database GUI
 ```
 
-### **With npm/yarn**
-
-```bash
-npm run dev      # ⚡ Development with tsx watch
-npm run build    # 🏗️ Build TypeScript to JavaScript
-npm run start    # 🚀 Run the built application
-```
-
-## 🎯 Module Benefits
-
-### **🧩 Better Organization**
-
-- Each feature is self-contained
-- Easy to enable/disable modules
-- Clear separation of concerns
-
-### **👥 Team Collaboration**
-
-- Multiple developers can work on different modules
-- Reduced merge conflicts
-- Clear ownership of features
-
-### **🔧 Maintainability**
-
-- Easy to debug module-specific issues
-- Simple to add/remove features
-- Clean upgrade paths
-
-### **📦 Reusability**
-
-- Modules can be shared between projects
-- Template modules for common features
-- Community module marketplace potential
-
-## 📚 Example Module: Ping Command
+## 📚 Example Module Structure
 
 ```
 src/modules/example-module/
 ├── commands/
-│   └── ping.ts              # /ping command
-├── components/
-│   ├── buttons/
-│   │   └── ping-button.ts   # Interactive ping button
-│   ├── dropdowns/
-│   │   └── example-dropdown.ts
-│   └── modals/
-│       └── example-modal.ts
+│   └── ping.command.ts
+├── buttons/
+│   └── example.button.ts
+├── dropdown/
+│   ├── example-dropdown.fallback.ts  # Triggered as fallback for the dropdown
+│   ├── option1.option.ts             # Handled via dedicated option file
+│   └── option2.option.ts
 └── events/
-    ├── db/                   # Database events
-    │   └── post-create.ts    # Logic for new post creation
-    └── discord/              # Discord API events
-        └── message-logger.ts # Logs messages to console
+    ├── message-logger.djs.ts         # Discord API events
+    └── post-create.db.ts             # Database events
 ```
 
 ## 🎨 Component Types
@@ -236,7 +204,7 @@ src/modules/example-module/
 ### **Buttons**
 
 ```typescript
-// Interactive buttons in messages
+// Interactive buttons in messages (**/*.button.ts)
 export const config: ButtonConfig = {
   customId: "my_button",
   name: "My Button",
@@ -248,25 +216,26 @@ export const run: ButtonRun = async (interaction) => {
 };
 ```
 
-### **Dropdowns**
+### **Dropdowns / Select Menus**
 
-You can handle the entire dropdown at once or handle specific options individually.
+The component routing provides an elegant way to resolve selected menu options via distinct file mapping.
 
 ```typescript
-// 1. Classic: Handle the entire dropdown menus
+// 1. Base/Fallback Dropdown (**/*.fallback.ts or **/*.dropdown.ts)
+// Triggered when no dedicated .option.ts file matches the selected value.
 export const config: DropdownConfig = {
   customId: "my_dropdown",
   name: "My Dropdown",
-  description: "Example dropdown description",
+  description: "Handles all unmatched selections",
 };
 
 export const run: DropdownRun = async (interaction) => {
-  // Handle any selection
+  // Handle selections lacking a dedicated option file
 };
 ```
 
 ```typescript
-// 2. Specific Option: Route based on the selected value
+// 2. Specific Option Route (**/*.option.ts)
 export const config: DropdownConfig = {
   parentCustomId: "my_dropdown", // ID of the parent select menu
   value: "specific_option",      // The exact value of the option selected
@@ -275,21 +244,6 @@ export const config: DropdownConfig = {
 
 export const run: DropdownRun = async (interaction) => {
   // Triggered ONLY when 'specific_option' is selected in 'my_dropdown'
-};
-```
-
-### **Modals**
-
-```typescript
-// Form modals
-export const config: ModalConfig = {
-  customId: "my_modal",
-  name: "My Modal",
-  description: "Example modal description",
-};
-
-export const run: ModalRun = async (interaction) => {
-  // Handle form submission
 };
 ```
 
@@ -305,19 +259,3 @@ export const run: ModalRun = async (interaction) => {
 ## 📝 License
 
 MIT © [fakejsdev](https://github.com/fakejsdev)
-
-## 🔗 Links
-
-- [Discord.js Documentation](https://discord.js.org/)
-- [TypeScript Documentation](https://www.typescriptlang.org/)
-- [Discord Developer Portal](https://discord.com/developers/applications)
-
----
-
-<div align="center">
-
-**[⭐ Star this project](https://github.com/fakejsdev/djs-template)** if you find it helpful!
-
-Made with ❤️ for the Discord.js community
-
-</div>
