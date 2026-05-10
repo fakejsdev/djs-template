@@ -8,7 +8,7 @@ import {
 export const config: ButtonConfig = {
   customId: "example-button",
   name: "Example Button",
-  description: "A button that responds with Pong!",
+  description: "A button that shows an example modal.",
 };
 
 export const run: ButtonRun = async (interaction) => {
