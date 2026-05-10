@@ -25,5 +25,17 @@ export const run: ButtonRun = async (interaction) => {
       ),
     );
 
-  return await interaction.showModal(exampleModal);
+  await interaction.showModal(exampleModal);
+
+  const modalSubmitInteraction = await interaction.awaitModalSubmit({
+    filter: (modalInteraction) =>
+      modalInteraction.customId === "example-modal" &&
+      modalInteraction.user.id === interaction.user.id,
+    time: 60_000,
+  });
+
+  return await modalSubmitInteraction.reply({
+    content: `You entered: ${modalSubmitInteraction.fields.getTextInputValue("exampleInput")}`,
+    ephemeral: true,
+  });
 };
