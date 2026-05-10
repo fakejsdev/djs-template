@@ -65,7 +65,9 @@ export const setupDropdownFiles = async () => {
   return allComponentsCount;
 };
 
-export const handleDropdownInteraction = async (i: any) => {
+export const handleDropdownInteraction = async (
+  i: DropdownInteraction<"cached">,
+) => {
   try {
     const selectedValue = i.values[0];
     const parentOptionsMap = dropdownOptions.get(i.customId);
