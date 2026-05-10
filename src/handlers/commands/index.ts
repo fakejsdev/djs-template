@@ -16,11 +16,11 @@ const setupCommandFiles = async () => {
 
 	for (const file of commandFiles) {
 		const module = await import(path.resolve(file));
-		const commandData: CommandConfigWithRun = module.default || module;
+		const commandData: CommandConfigWithRun = module;
 
 		if (!commandData?.config || !commandData?.run)
 			throw new Error(
-				`Command file ${file} must export config and run (preferably as default using createCommand)`,
+				`Command file ${file} must export config and run `,
 			);
 
 		if (commands.has(commandData.config.name))

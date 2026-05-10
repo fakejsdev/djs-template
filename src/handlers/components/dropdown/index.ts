@@ -19,13 +19,13 @@ export const setupDropdownFiles = async () => {
 
 	for (const file of dropdownFiles) {
 		const module = await import(path.resolve(file));
-		const dropdownData: DropdownConfigWithRun = module.default || module;
+		const dropdownData: DropdownConfigWithRun = module;
 		const config = dropdownData?.config;
 		const run = dropdownData?.run;
 
 		if (!config || !run)
 			throw new Error(
-				`Dropdown file must export both config and run (Error in: ${file}, preferably as default using createDropdown)`,
+				`Dropdown file must export both config and run (Error in: ${file})`,
 			);
 
 		if (config.customId) {
