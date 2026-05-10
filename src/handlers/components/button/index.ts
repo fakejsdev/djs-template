@@ -20,7 +20,7 @@ export const setupButtonFiles = async () => {
 
 		if (!buttonData?.config || !buttonData?.run)
 			throw new Error(
-				`Button file ${file} must export config and run `,
+				`Button file ${file} must export named \`config\` and \`run\``,
 			);
 
 		if (buttons.has(buttonData.config.customId))
