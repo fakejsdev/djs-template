@@ -16,11 +16,11 @@ export const setupButtonFiles = async () => {
 
 	for (const file of buttonFiles) {
 		const module = await import(path.resolve(file));
-		const buttonData: ButtonConfigWithRun = module.default || module;
+		const buttonData: ButtonConfigWithRun = module;
 
 		if (!buttonData?.config || !buttonData?.run)
 			throw new Error(
-				`Button file ${file} must export config and run (preferably as default using createButton)`,
+				`Button file ${file} must export named \`config\` and \`run\``,
 			);
 
 		if (buttons.has(buttonData.config.customId))
