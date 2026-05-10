@@ -36,6 +36,6 @@ export const run: ButtonRun = async (interaction) => {
 
   return await modalSubmitInteraction.reply({
     content: `You entered: ${modalSubmitInteraction.fields.getTextInputValue("exampleInput")}`,
-    ephemeral: true,
+    flags: ["Ephemeral"],
   });
 };
