@@ -8,7 +8,7 @@ declare global {
     name: string;
     description?: string;
   };
-  type ButtonRun = (i: ButtonInteraction<"cached">) => Promise<unknown>;
+  type ButtonRun = (i: ButtonInteraction) => Promise<unknown>;
 
   type ButtonConfigWithRun = {
     config: ButtonConfig;
