@@ -1,6 +1,6 @@
-import path from "node:path";
-import { globSync } from "glob";
-import { Console } from "@/lib/utils";
+import path from 'node:path';
+import { globSync } from 'glob';
+import { Console } from '@/lib/utils';
 
 type DropdownsMap = Map<string, DropdownConfigWithRun>;
 type DropdownOptionsMap = Map<string, Map<string, DropdownConfigWithRun>>;
@@ -9,13 +9,10 @@ const dropdowns: DropdownsMap = new Map();
 const dropdownOptions: DropdownOptionsMap = new Map();
 
 export const setupDropdownFiles = async () => {
-  const dropdownFiles = globSync(
-    "src/modules/**/*.{dropdown,option,fallback}.{js,ts}",
-    {
-      cwd: process.cwd(),
-      ignore: ["**/*.{test,spec}.{js,ts}", "**/_*"],
-    },
-  );
+  const dropdownFiles = globSync('src/modules/**/*.{dropdown,option,fallback}.{js,ts}', {
+    cwd: process.cwd(),
+    ignore: ['**/*.{test,spec}.{js,ts}', '**/_*'],
+  });
 
   const allComponentsCount = new Map<string, DropdownConfigWithRun>();
   if (!dropdownFiles.length) return allComponentsCount;
@@ -27,9 +24,7 @@ export const setupDropdownFiles = async () => {
     const run = dropdownData?.run;
 
     if (!config || !run)
-      throw new Error(
-        `Dropdown file must export both config and run (Error in: ${file})`,
-      );
+      throw new Error(`Dropdown file must export both config and run (Error in: ${file})`);
 
     if (config.customId) {
       if (dropdowns.has(config.customId))
@@ -45,9 +40,7 @@ export const setupDropdownFiles = async () => {
       }
 
       if (parentOptions.has(config.value)) {
-        throw new Error(
-          `Duplicate option value '${config.value}' for '${config.parentCustomId}'`,
-        );
+        throw new Error(`Duplicate option value '${config.value}' for '${config.parentCustomId}'`);
       }
 
       parentOptions.set(config.value, { config, run });
@@ -65,9 +58,7 @@ export const setupDropdownFiles = async () => {
   return allComponentsCount;
 };
 
-export const handleDropdownInteraction = async (
-  i: DropdownInteraction<"cached">,
-) => {
+export const handleDropdownInteraction = async (i: DropdownInteraction<'cached'>) => {
   try {
     const selectedValue = i.values[0];
     const parentOptionsMap = dropdownOptions.get(i.customId);
@@ -84,9 +75,7 @@ export const handleDropdownInteraction = async (
       return;
     }
 
-    Console.Warn(
-      `No handler found for dropdown ${i.customId} and its option: ${selectedValue}`,
-    );
+    Console.Warn(`No handler found for dropdown ${i.customId} and its option: ${selectedValue}`);
   } catch (error) {
     Console.Error(`Error running dropdown ${i.customId}`, error);
   }

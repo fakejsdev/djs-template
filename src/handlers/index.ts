@@ -1,74 +1,74 @@
-import { Console } from "@/lib/utils";
-import { initCommandHandler } from "./commands";
-import { initComponentsHandler } from "./components";
-import { initDatabaseEventHandler } from "./events/db";
-import { initDiscordEventHandler } from "./events/discord";
+import { Console } from '@/lib/utils';
+import { initCommandHandler } from './commands';
+import { initComponentsHandler } from './components';
+import { initDatabaseEventHandler } from './events/db';
+import { initDiscordEventHandler } from './events/discord';
 
 export class HandlersManager {
-	private setupTasks: (() => Promise<void>)[] = [];
-	private queuedHandlers = new Set<string>();
+  private setupTasks: (() => Promise<void>)[] = [];
+  private queuedHandlers = new Set<string>();
 
-	public setupCommandHandler() {
-		if (this.queuedHandlers.has("commands")) {
-			Console.Warn("Command handler already queued");
-			return this;
-		}
+  public setupCommandHandler() {
+    if (this.queuedHandlers.has('commands')) {
+      Console.Warn('Command handler already queued');
+      return this;
+    }
 
-		this.queuedHandlers.add("commands");
+    this.queuedHandlers.add('commands');
 
-		this.setupTasks.push(async () => {
-			await initCommandHandler();
-		});
-		return this;
-	}
+    this.setupTasks.push(async () => {
+      await initCommandHandler();
+    });
+    return this;
+  }
 
-	public setupDiscordEventHandler() {
-		if (this.queuedHandlers.has("events")) {
-			Console.Warn("Event handler already queued");
-			return this;
-		}
+  public setupDiscordEventHandler() {
+    if (this.queuedHandlers.has('events')) {
+      Console.Warn('Event handler already queued');
+      return this;
+    }
 
-		this.queuedHandlers.add("events");
+    this.queuedHandlers.add('events');
 
-		this.setupTasks.push(async () => {
-			await initDiscordEventHandler();
-		});
-		return this;
-	}
+    this.setupTasks.push(async () => {
+      await initDiscordEventHandler();
+    });
+    return this;
+  }
 
-	public setupDatabaseEventHandler() {
-		if (this.queuedHandlers.has("databaseEvents")) {
-			Console.Warn("Database event handler already queued");
-			return this;
-		}
+  public setupDatabaseEventHandler() {
+    if (this.queuedHandlers.has('databaseEvents')) {
+      Console.Warn('Database event handler already queued');
+      return this;
+    }
 
-		this.queuedHandlers.add("databaseEvents");
+    this.queuedHandlers.add('databaseEvents');
 
-		this.setupTasks.push(async () => {
-			await initDatabaseEventHandler();
-		});
-		return this;
-	}
+    this.setupTasks.push(async () => {
+      await initDatabaseEventHandler();
+    });
+    return this;
+  }
 
-	public setupComponentHandler() {
-		if (this.queuedHandlers.has("components")) {
-			Console.Warn("Component handler already queued");
-			return this;
-		}
+  public setupComponentHandler() {
+    if (this.queuedHandlers.has('components')) {
+      Console.Warn('Component handler already queued');
+      return this;
+    }
 
-		this.queuedHandlers.add("components");
+    this.queuedHandlers.add('components');
 
-		this.setupTasks.push(async () => {
-			await initComponentsHandler();
-		});
-		return this;
-	}
+    this.setupTasks.push(async () => {
+      await initComponentsHandler();
+    });
+    return this;
+  }
 
-	public async build() {
-		for (const task of this.setupTasks) {
-			await task();
-		}
-		Console.Log("✅ All handlers initialized successfully");
-		this.setupTasks = [];
-	}
+  public async build() {
+    for (const task of this.setupTasks) {
+      await task();
+    }
+    Console.Log('✅ All handlers initialized successfully');
+    this.setupTasks = [];
+  }
 }

@@ -1,7 +1,7 @@
-import type { ButtonInteraction as DiscordButtonInteraction } from "discord.js";
+import type { ButtonInteraction as DiscordButtonInteraction } from 'discord.js';
 
 declare global {
-  type ButtonInteraction = DiscordButtonInteraction<"cached">;
+  type ButtonInteraction = DiscordButtonInteraction<'cached'>;
 
   type ButtonConfig = {
     customId: string;

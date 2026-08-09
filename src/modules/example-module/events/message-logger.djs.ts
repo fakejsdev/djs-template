@@ -1,10 +1,10 @@
-import { createDiscordEvent } from "@/lib/helpers/createDiscordEvent";
+import { createDiscordEvent } from '@/lib/helpers/createDiscordEvent';
 
 export const { config, run } = createDiscordEvent(
   {
-    name: "Message Logger",
-    on: "messageCreate",
-    description: "Logs messages to the console.",
+    name: 'Message Logger',
+    on: 'messageCreate',
+    description: 'Logs messages to the console.',
   },
   async (message) => {
     if (message.author.bot) return;
