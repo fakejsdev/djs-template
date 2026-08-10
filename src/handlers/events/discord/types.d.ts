@@ -10,7 +10,7 @@ declare global {
 
   type DiscordEventRun<T extends keyof ClientEvents = keyof ClientEvents> = (
     ...args: ClientEvents[T]
-  ) => Promise<void> | void;
+  ) => Promise<unknown> | unknown;
 
   type DiscordEventConfigWithRun<T extends keyof ClientEvents = keyof ClientEvents> = {
     config: DiscordEventConfig<T>;

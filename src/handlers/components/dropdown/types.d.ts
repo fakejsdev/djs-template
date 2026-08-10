@@ -11,7 +11,7 @@ declare global {
     description?: string;
   };
 
-  type DropdownRun = (i: DropdownInteraction<'cached'>) => Promise<unknown>;
+  type DropdownRun = (i: DropdownInteraction<'cached'>) => Promise<unknown> | unknown;
 
   type DropdownConfigWithRun = {
     config: DropdownConfig;

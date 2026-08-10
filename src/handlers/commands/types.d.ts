@@ -6,7 +6,7 @@ import type {
 
 declare global {
   type CommandConfig = SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
-  type CommandRun = (i: CommandInteraction<'cached'>) => Promise<unknown>;
+  type CommandRun = (i: CommandInteraction<'cached'>) => Promise<unknown> | unknown;
   type CommandConfigWithRun = {
     config: CommandConfig;
     run: CommandRun;
