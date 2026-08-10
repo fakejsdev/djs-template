@@ -35,7 +35,7 @@ const setupCommandFiles = async () => {
   return commands;
 };
 
-const CACHE_FILE = path.join(process.cwd(), '.commands-hash');
+const CACHE_FILE = path.join(process.cwd(), '.djs', '.cache');
 
 const registerSlashCommand = async (commands: CommandsMap) => {
   const guildId = process.env.GUILD_ID;
@@ -61,7 +61,13 @@ const registerSlashCommand = async (commands: CommandsMap) => {
     Console.Error(`Error registering commands:`, err);
   });
 
+  const cacheDir = path.dirname(CACHE_FILE);
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
+
   fs.writeFileSync(CACHE_FILE, currentHash);
+
   Console.Log(`🎯 Registered ${finalCommands.length} base command(s) in ${guild.name}`);
 };
 
