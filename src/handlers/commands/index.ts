@@ -1,3 +1,5 @@
+import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import { globSync } from 'glob';
 import { client } from '@/lib/discord';
@@ -33,6 +35,8 @@ const setupCommandFiles = async () => {
   return commands;
 };
 
+const CACHE_FILE = path.join(process.cwd(), '.commands-hash');
+
 const registerSlashCommand = async (commands: CommandsMap) => {
   const guildId = process.env.GUILD_ID;
   if (!guildId) throw new Error('GUILD_ID is not set in environment variables');
@@ -40,15 +44,25 @@ const registerSlashCommand = async (commands: CommandsMap) => {
   const guild = client.guilds.cache.get(guildId);
   if (!guild) throw new Error(`Guild with ID ${guildId} not found`);
 
-  for (const [name, { config }] of commands) {
-    await guild.commands.create(config).catch((err) => {
-      Console.Error(`Error registering command ${name} :`, err);
-    });
+  const finalCommands = Array.from(commands.values()).map((c) => c.config);
+
+  const commandsJson = JSON.stringify(finalCommands.map((c) => c.toJSON()));
+  const currentHash = crypto.createHash('md5').update(commandsJson).digest('hex');
+
+  if (fs.existsSync(CACHE_FILE)) {
+    const previousHash = fs.readFileSync(CACHE_FILE, 'utf-8');
+    if (previousHash === currentHash) {
+      Console.Log(`⏩ Commands unchanged. Skipping API registration (Fast Boot).`);
+      return;
+    }
   }
 
-  Console.Log(
-    `🎯 Registered ${commands.size} command${commands.size === 1 ? '' : 's'} in ${guild.name}`,
-  );
+  await guild.commands.set(finalCommands).catch((err: unknown) => {
+    Console.Error(`Error registering commands:`, err);
+  });
+
+  fs.writeFileSync(CACHE_FILE, currentHash);
+  Console.Log(`🎯 Registered ${finalCommands.length} base command(s) in ${guild.name}`);
 };
 
 const startCommandHandling = async (commands: CommandsMap) => {
