@@ -38,3 +38,6 @@ src/lib/prisma/generated
 
 # Database
 src/db/discord.db
+
+# Commands Caching
+.commands-hash

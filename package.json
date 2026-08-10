@@ -25,7 +25,9 @@
     "@libsql/client": "^0.17.2",
     "@prisma/adapter-libsql": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "bullmq": "^6.0.9",
     "discord.js": "^14.21.0",
-    "glob": "^11.0.3"
+    "glob": "^11.0.3",
+    "ioredis": "^6.0.0"
   }
 }
