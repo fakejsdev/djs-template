@@ -9,7 +9,9 @@
     "lint": "biome lint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "services:up": "docker-compose -f docker-compose.services.yml up -d",
+    "services:down": "docker-compose -f docker-compose.services.yml down"
   },
   "private": true,
   "devDependencies": {
