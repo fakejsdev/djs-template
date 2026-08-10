@@ -17,7 +17,7 @@ declare global {
 
   type DatabaseEventRun<T extends DatabaseEventName = DatabaseEventName> = (
     data: T extends `${infer Model}.${DatabaseAction}` ? PayloadType<Model> : unknown,
-  ) => Promise<void> | void;
+  ) => Promise<unknown> | unknown;
 
   type DatabaseEventConfigWithRun<T extends DatabaseEventName = DatabaseEventName> = {
     config: DatabaseEventConfig<T>;

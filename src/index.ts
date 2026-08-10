@@ -3,6 +3,7 @@ import { Console } from '@/lib/utils';
 import { HandlersManager } from './handlers';
 
 const manager = new HandlersManager()
+  .setupWorkerHandler()
   .setupDiscordEventHandler()
   .setupDatabaseEventHandler()
   .setupCommandHandler()

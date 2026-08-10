@@ -1,14 +1,20 @@
 import type {
-  ChatInputCommandInteraction as CommandInteraction,
+  ChatInputCommandInteraction,
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
+  SlashCommandSubcommandBuilder,
+  SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 
 declare global {
-  type CommandConfig = SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
-  type CommandRun = (i: CommandInteraction<'cached'>) => Promise<unknown>;
-  type CommandConfigWithRun = {
-    config: CommandConfig;
-    run: CommandRun;
-  };
+  type CommandRun = (i: ChatInputCommandInteraction<'cached'>) => Promise<unknown> | unknown;
+
+  type CommandConfig =
+    | SlashCommandBuilder
+    | SlashCommandOptionsOnlyBuilder
+    | SlashCommandSubcommandsOnlyBuilder;
+
+  type SubcommandConfig = (
+    subcommand: SlashCommandSubcommandBuilder,
+  ) => SlashCommandSubcommandBuilder;
 }

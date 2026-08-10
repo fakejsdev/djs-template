@@ -3,6 +3,7 @@ import { initCommandHandler } from './commands';
 import { initComponentsHandler } from './components';
 import { initDatabaseEventHandler } from './events/db';
 import { initDiscordEventHandler } from './events/discord';
+import { initWorkerHandler } from './workers';
 
 export class HandlersManager {
   private setupTasks: (() => Promise<void>)[] = [];
@@ -60,6 +61,20 @@ export class HandlersManager {
 
     this.setupTasks.push(async () => {
       await initComponentsHandler();
+    });
+    return this;
+  }
+
+  public setupWorkerHandler() {
+    if (this.queuedHandlers.has('workers')) {
+      Console.Warn('Worker handler already queued');
+      return this;
+    }
+
+    this.queuedHandlers.add('workers');
+
+    this.setupTasks.push(async () => {
+      await initWorkerHandler();
     });
     return this;
   }
