@@ -72,14 +72,13 @@ const startCommandHandling = async (commands: CommandsMap) => {
     const command = commands.get(i.commandName);
     if (!command) return Console.Error(`Command ${i.commandName} not found`);
 
-    await command
-      .run(i)
-      .catch((err) => {
-        Console.Error(`Error running command ${i.commandName}`, err);
-      })
-      .finally(() => {
-        Console.Log(`(✓) Command ${i.commandName} executed`);
-      });
+    try {
+      await command.run(i);
+    } catch (err: unknown) {
+      Console.Error(`Error running command ${i.commandName}`, err);
+    } finally {
+      Console.Log(`(✓) Command ${i.commandName} executed`);
+    }
   });
 
   await registerSlashCommand(commands);
