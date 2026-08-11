@@ -1,7 +1,6 @@
-
 services:
   redis:
-    image: redis:trixie
+    image: redis:8.8.1
     container_name: djs-template-redis
     ports:
       - "6379:6379"
@@ -9,5 +8,18 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes
 
+  postgresql:
+    image: postgres:18
+    container_name: djs-template-postgresql
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+
 volumes:
   redis_data:
+  postgresql_data:

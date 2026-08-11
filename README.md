@@ -7,6 +7,7 @@
 [![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh/)
 [![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 ## ✨ Key Architectural Features
 
@@ -54,24 +55,24 @@ cd djs-template
 bun install
 ```
 
-### 2. **Infrastructure Setup (Redis)**
+### 2. **Infrastructure Setup (PostgreSQL & Redis)**
 
-This template requires a Redis instance for the BullMQ background worker system. A ready-to-use `docker-compose.services.yml` is provided.
+This template uses PostgreSQL as its primary database and requires a Redis instance for the BullMQ background worker system. A ready-to-use `docker-compose.services.yml` is provided to run both locally.
 
 ```bash
 # Copy environment file
 cp .env.example .env
 
-# Spin up the Redis container for background jobs
+# Spin up the PostgreSQL and Redis containers
 bun run services:up
 ```
 
-*Ensure you fill in your `BOT_TOKEN` and `DATABASE_URL` in the `.env` file.*
+*Ensure you configure your `PG_DB`, `PG_USER`, `PG_PASSWORD`, `DATABASE_URL`, and `BOT_TOKEN` in the `.env` file.*
 
 ### 3. **Development**
 
 ```bash
-# Push schema to SQLite/Postgres and generate the Prisma Client
+# Push schema to PostgreSQL and generate the Prisma Client
 bun run db:push
 bun run db:generate
 
@@ -215,4 +216,4 @@ bun run db:studio       # 📊 Open Prisma database GUI
 
 ## 📝 License
 
-MIT © [fakejsdev](https://github.com/fakejsdev)
+MIT © [fakejsdev](https://github.com/fakejsdev)/*-+1234567890,\
