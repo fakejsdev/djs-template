@@ -1,10 +1,13 @@
-import { PrismaLibSql } from '@prisma/adapter-libsql';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 import { dbEmitter } from '@/lib/helpers/databaseEmitter';
 import { PrismaClient } from './generated/client';
 
-const adapter = new PrismaLibSql({
-  url: process.env.DATABASE_URL!,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
 });
+
+const adapter = new PrismaPg(pool);
 
 const prismaClientSingleton = () => {
   const basePrisma = new PrismaClient({ adapter });
@@ -31,6 +34,7 @@ const prismaClientSingleton = () => {
     },
   });
 };
+
 type PrismaClientExtended = ReturnType<typeof prismaClientSingleton>;
 
 const globalForPrisma = globalThis as unknown as {
